@@ -1,0 +1,14 @@
+server:
+  port: 7778
+spring:
+  application:
+    name: native_boot_demo
+  datasource:
+    url: jdbc:postgresql://localhost:5432/demo
+    username: lemonsoul
+    password: xiaoxu
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database: postgresql
