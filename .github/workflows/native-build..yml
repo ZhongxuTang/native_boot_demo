@@ -25,7 +25,7 @@ jobs:
 
     - name: Build with native-image
       run: |
-        ./gradlew build nativeImage  # 如果你使用 Gradle
+        ./gradlew nativeCompile  # 如果你使用 Gradle
         # 或者 ./mvnw package -Pnative  # 如果你使用 Maven
 
     - name: Archive production artifacts
