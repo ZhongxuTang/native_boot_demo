@@ -25,7 +25,7 @@ dependencies {
     implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.3'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    implementation group: 'com.bmuschko', name: 'gradle-docker-plugin', version: '3.3.5'
+    //implementation group: 'com.bmuschko', name: 'gradle-docker-plugin', version: '3.3.5'
 }
 
 tasks.named('test') {
