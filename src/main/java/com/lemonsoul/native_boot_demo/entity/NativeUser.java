@@ -1,6 +1,8 @@
 package com.lemonsoul.native_boot_demo.entity;
 
+import com.lemonsoul.native_boot_demo.listener.SelfEntityListener;
 import jakarta.persistence.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
 
@@ -8,8 +10,9 @@ import java.util.Date;
  * @author tzx
  */
 @Entity
-@Table(name = "user")
-public class User {
+@EntityListeners(AuditingEntityListener.class)
+@Table(name = "native_user")
+public class NativeUser extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,9 +24,6 @@ public class User {
 
     private String phone;
 
-    private Date createTime;
-
-    private Date updateTime;
 
     public Long getId() {
         return id;
@@ -57,19 +57,4 @@ public class User {
         this.phone = phone;
     }
 
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
 }
