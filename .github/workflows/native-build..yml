@@ -16,7 +16,7 @@ jobs:
     - name: Set up GraalVM 17
       uses: graalvm/setup-graalvm@v1
       with:
-        version: '17.0.8'  # 具体的 GraalVM 版本
+        java-version: '17.0.8'  # 具体的 GraalVM 版本
         java-package: jdk
         components: native-image
 
