@@ -37,14 +37,14 @@ jobs:
     - name: Create Release
       uses: softprops/action-gh-release@v2
       with:
-        tag_name: ${{ github.ref_name }}
-        release_name: Release ${{ github.ref_name }}
+        tag_name: ${{ github.repository }}
+        release_name: Release ${{ github.repository }}
         body: |
           Automated release from GitHub Actions
         draft: false
         prerelease: false
         generate_release_notes: false
         files: |
-          build/native-image/*  # 或者 target/native-image/* 如果使用 Maven
+          build/native/nativeCompile/*
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
