@@ -3,11 +3,26 @@ name: Build Native Image
 on:
   push:
     branches:
-      - main  # 在推送到 main 分支时触发
+      - config
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        architecture: [ x64, arm64 ]
+        include:
+          - os: macos-latest
+            architecture: x64
+          - os: macos-latest
+            architecture: arm64
+          - os: ubuntu-latest
+            architecture: x64
+          - os: ubuntu-latest
+            architecture: arm64
+          - os: windows-latest
+            architecture: x64
+    runs-on: ${{ matrix.os }}
 
     steps:
     - name: Checkout code
@@ -16,24 +31,33 @@ jobs:
     - name: Set up GraalVM 17
       uses: graalvm/setup-graalvm@v1
       with:
-        java-version: '17.0.8'  # 具体的 GraalVM 版本
+        java-version: '17.0.12'  # 具体的 GraalVM 版本
         java-package: jdk
+        architecture: ${{ matrix.architecture }}
         components: native-image
 
     - name: Set up environment variables
-      run: echo JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java)))) >> $GITHUB_ENV
+      #run: echo JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java)))) >> $GITHUB_ENV
+      run: |
+        if [ "${{ matrix.os }}" == "windows-latest" ]; then
+          echo "PATH=C:\Program Files\GraalVM\bin;$PATH" >> $GITHUB_ENV
+        else
+          echo "export PATH=${{ steps.graalvm.outputs.native-image-bin-dir }}:$PATH" >> $GITHUB_ENV
+        fi
 
     - name: Build with native-image
       run: |
-        ./gradlew nativeCompile  # 如果你使用 Gradle
-        # 或者 ./mvnw package -Pnative  # 如果你使用 Maven
+        ./gradlew nativeCompile
 
-    - name: Archive production artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: native-application
-        path: build/native-image/* # or target/native-image/* if using Maven
-
+    #- name: Archive production artifacts
+    #  uses: actions/upload-artifact@v3
+    #  with:
+    #    name: native-application
+    #    path: build/native-image/*
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
     - name: Create Release
       uses: softprops/action-gh-release@v2
       with:
