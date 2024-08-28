@@ -6,62 +6,62 @@ on:
       - config
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+  #build:
+  #  runs-on: ubuntu-latest
+  #  steps:
+  #    - name: Checkout code
+  #      uses: actions/checkout@v3
+#
+  #    - name: Set up GraalVM 17 (Ubuntu x64)
+  #      uses: graalvm/setup-graalvm@v1
+  #      with:
+  #        java-version: '17.0.12'
+  #        java-package: jdk
+  #        architecture: x64
+  #        components: native-image
+#
+  #    - name: Build on Ubuntu x64
+  #      run: |
+  #        ./gradlew nativeCompile
+  #      env:
+  #        JAVA_HOME: ${{ steps.graalvm.outputs.native-image-bin-dir }}
+#
+  #    - name: Archive production artifacts (Ubuntu x64)
+  #      uses: actions/upload-artifact@v3
+  #      with:
+  #        name: native-application-ubuntu-x64
+  #        path: build/native/nativeCompile/*
 
-      - name: Set up GraalVM 17 (Ubuntu x64)
-        uses: graalvm/setup-graalvm@v1
-        with:
-          java-version: '17.0.12'
-          java-package: jdk
-          architecture: x64
-          components: native-image
-
-      - name: Build on Ubuntu x64
-        run: |
-          ./gradlew nativeCompile
-        env:
-          JAVA_HOME: ${{ steps.graalvm.outputs.native-image-bin-dir }}
-
-      - name: Archive production artifacts (Ubuntu x64)
-        uses: actions/upload-artifact@v3
-        with:
-          name: native-application-ubuntu-x64
-          path: build/native/nativeCompile/*
-
-  build_windows:
-    runs-on: windows-latest
-    needs: build
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up GraalVM 17 (Windows x64)
-        uses: graalvm/setup-graalvm@v1
-        with:
-          java-version: '17.0.12'
-          java-package: jdk
-          architecture: x64
-          components: native-image
-
-      - name: Build on Windows x64
-        run: |
-          ./gradlew nativeCompile
-        env:
-          JAVA_HOME: ${{ steps.graalvm.outputs.native-image-bin-dir }}
-
-      - name: Archive production artifacts (Windows x64)
-        uses: actions/upload-artifact@v3
-        with:
-          name: native-application-windows-x64
-          path: build/native/nativeCompile/*
-
+  #build_windows:
+  #  runs-on: windows-latest
+  #  needs: build
+  #  steps:
+  #    - name: Checkout code
+  #      uses: actions/checkout@v3
+#
+  #    - name: Set up GraalVM 17 (Windows x64)
+  #      uses: graalvm/setup-graalvm@v1
+  #      with:
+  #        java-version: '17.0.12'
+  #        java-package: jdk
+  #        architecture: x64
+  #        components: native-image
+#
+  #    - name: Build on Windows x64
+  #      run: |
+  #        ./gradlew nativeCompile
+  #      env:
+  #        JAVA_HOME: ${{ steps.graalvm.outputs.native-image-bin-dir }}
+#
+  #    - name: Archive production artifacts (Windows x64)
+  #      uses: actions/upload-artifact@v3
+  #      with:
+  #        name: native-application-windows-x64
+  #        path: build/native/nativeCompile/*
+#
   build_macos:
     runs-on: macos-latest
-    needs: build_windows
+    #needs: build_windows
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -76,6 +76,7 @@ jobs:
 
       - name: Build on macOS ARM64
         run: |
+          export GRAALVM_OPTS="-Xmx4g"
           ./gradlew nativeCompile
         env:
           JAVA_HOME: ${{ steps.graalvm.outputs.native-image-bin-dir }}
